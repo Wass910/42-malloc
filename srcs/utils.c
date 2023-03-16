@@ -15,6 +15,34 @@ void	ft_lstadd_back(t_block **alst, t_block *new)
 	}
 }
 
+void	ft_lstadd_back_history(t_history **alst, t_history *new)
+{
+	t_history	*lst;
+
+	lst = *alst;
+	if (*alst == NULL)
+		*alst = new;
+	else
+	{
+		while (lst->next)
+			lst = lst->next;
+		lst->next = new;
+	}
+}
+
+t_history *new_history(char *str, void *ptr)
+{
+    t_history *history = mmap(NULL, sizeof(t_history), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (history == MAP_FAILED) {
+        perror("mmap");
+        return NULL;
+    }
+    history->next = NULL;
+    history->addr = ptr;
+    history->str = str;
+    return history;
+}
+
 void	ft_lstdelone(t_block *block)
 {    
     t_zone zone_large = *g_zones.large;
@@ -54,7 +82,7 @@ void show_alloc_mem()
     if (g_zones.tiny != NULL && g_zones.small != NULL)
     {
         t_zone zone = *g_zones.tiny;
-        printf("TINY ZONE : %p\n", zone.blocks);
+        printf("TINY : %p\n", zone.blocks);
         while (zone.blocks != NULL)
         {
             if (zone.blocks->free == 1 && zone.blocks->next != NULL)
@@ -65,7 +93,7 @@ void show_alloc_mem()
         }
 
         t_zone zone2 = *g_zones.small;
-        printf("SMALL ZONE : %p\n", zone2.blocks);
+        printf("SMALL : %p\n", zone2.blocks);
         while (zone2.blocks != NULL)
         {
             if (zone2.blocks->free == 1 && zone2.blocks->next != NULL)
@@ -78,7 +106,7 @@ void show_alloc_mem()
     if (g_zones.large != NULL)
     {
         t_zone zone3 = *g_zones.large;
-        printf("LARGE ZONE : %p\n", zone3.blocks);
+        printf("LARGE : %p\n", zone3.blocks);
         while (zone3.blocks != NULL)
         {
             if (zone3.blocks->free == 1 && zone3.blocks->next != NULL)
@@ -89,7 +117,21 @@ void show_alloc_mem()
         }
     }
     printf("Total : %zu bytes\n", g_zones.size);
-    printf("----------------------\n");
+}
+
+void show_alloc_mem_ex()
+{
+    if (g_zones.history != NULL)
+    {
+        t_history *history = g_zones.history;
+        printf("History of allocation : \n\n");
+        while (history->next != NULL)
+        {
+            printf("%s %p\n", history->str, history->addr);
+            history = history->next;
+        }
+        printf("%s %p\n", history->str, history->addr);
+    }
 }
 
 void *allocate_zone()

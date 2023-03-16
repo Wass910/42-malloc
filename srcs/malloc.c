@@ -1,6 +1,6 @@
 #include "../inc/libft_malloc.h"
 
-t_zones g_zones = {NULL, NULL, NULL, 0};
+t_zones g_zones = {NULL, NULL, NULL, 0, NULL};
 
 
 
@@ -18,6 +18,7 @@ void *tiny_malloc(size_t size)
             }
             zone.blocks->free = 1;
             zone.blocks->size = size;
+            ft_lstadd_back_history(&g_zones.history, new_history("New tiny malloc called by : ", zone.blocks));
             return zone.blocks->addr;
         }
         zone.blocks = zone.blocks->next;
@@ -40,6 +41,7 @@ void *small_malloc(size_t size)
             }
             zone.blocks->free = 1;
             zone.blocks->size = size;
+            ft_lstadd_back_history(&g_zones.history, new_history("New small malloc called by : ", zone.blocks));
             return zone.blocks->addr;
         }
         zone.blocks = zone.blocks->next;
@@ -69,6 +71,7 @@ void *large_malloc(size_t size)
             }
             zone.blocks->free = 1;
             zone.blocks->size = size;
+            ft_lstadd_back_history(&g_zones.history, new_history("New large malloc called by : ", zone.blocks));
             return zone.blocks->addr;
         }
         zone.blocks = zone.blocks->next;

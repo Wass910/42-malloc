@@ -64,6 +64,7 @@ void *new_allocation(void *ptr, size_t size)
                 g_zones.size = g_zones.size - zone_tiny.blocks->size;
                 zone_tiny.blocks->size = size;
                 g_zones.size = g_zones.size + zone_tiny.blocks->size;
+                ft_lstadd_back_history(&g_zones.history, new_history("New tiny realloc called by : ", zone_tiny.blocks->addr));
                 return zone_tiny.blocks->addr;
             }
             else
@@ -81,6 +82,7 @@ void *new_allocation(void *ptr, size_t size)
                 g_zones.size = g_zones.size - zone_small.blocks->size;
                 zone_small.blocks->size = size;
                 g_zones.size = g_zones.size + zone_small.blocks->size;
+                ft_lstadd_back_history(&g_zones.history, new_history("New small realloc called by : ", zone_small.blocks->addr));
                 return zone_small.blocks->addr;
             }
             else
@@ -97,6 +99,7 @@ void *new_allocation(void *ptr, size_t size)
                 g_zones.size = g_zones.size - zone_large.blocks->size;
                 zone_large.blocks->size = size;
                 g_zones.size = g_zones.size + zone_large.blocks->size;
+                ft_lstadd_back_history(&g_zones.history, new_history("New large realloc called by : ", zone_large.blocks->addr));
                 return zone_large.blocks->addr;
             }
             return smaller_large(zone_large.blocks, size);

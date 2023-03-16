@@ -7,19 +7,26 @@ int main() {
     void *str4 = malloc(10000);
     char *str3 = malloc(64366);
     show_alloc_mem();
+    printf("\n*******************************\n\n");
     str3 = realloc(str3, 100);
     char *str5 = malloc(259);
     str = realloc(str4, 3);
     show_alloc_mem();
+    printf("\n*******************************\n\n");
     free(str);
     show_alloc_mem();
+    printf("\n*******************************\n\n");
     str = realloc(str, 111);
     show_alloc_mem();
+    printf("\n*******************************\n\n");
+    //show_alloc_mem_ex();
+    printf("\n*******************************\n\n");
     free(str2);
-    free(str5);
     free(str3);
-    free(str);
     free(str4);
+    free(str5);
+    free(str);
+    show_alloc_mem();
     return 0;
 }
 
