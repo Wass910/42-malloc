@@ -31,6 +31,15 @@ typedef struct s_zones
     size_t size;
 } t_zones;
 
+void    free(void *ptr);
+void    *malloc(size_t size);
+void    *realloc(void *ptr, size_t size);
+void    ft_lstadd_back(t_block **alst, t_block *new);
+void	ft_lstdelone(t_block *block);
+t_block *new_block(size_t size);
+void    show_alloc_mem();
+void    *allocate_zone();
 
+extern t_zones g_zones;
 
 #endif
