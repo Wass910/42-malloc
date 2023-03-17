@@ -2,7 +2,6 @@
 
 
 int main() {
-    printf("tg");
     void *str = malloc(20);
     char *str2 = malloc(2000);
     void *str4 = malloc(10000);
