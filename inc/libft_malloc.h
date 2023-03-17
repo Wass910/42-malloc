@@ -4,9 +4,10 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-#define TINY 128
-#define SMALL 512
+#define TINY 32
+#define SMALL 128
 
 typedef struct s_block
 {

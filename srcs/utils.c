@@ -5,12 +5,17 @@ void	ft_lstadd_back(t_block **alst, t_block *new)
 	t_block	*lst;
 
 	lst = *alst;
-	if (*alst == NULL)
+	if(*alst == NULL){
+        if(new == NULL)
+            return ;
 		*alst = new;
+    }
 	else
 	{
 		while (lst->next)
 			lst = lst->next;
+        if(new == NULL)
+            return ;
 		lst->next = new;
 	}
 }
@@ -66,9 +71,8 @@ void	ft_lstdelone(t_block *block)
 
 t_block *new_block(size_t size)
 {
-    t_block *block = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    t_block *block = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE , -1, 0);
     if (block == MAP_FAILED) {
-        perror("mmap");
         return NULL;
     }
     block->next = NULL;
@@ -137,17 +141,17 @@ void show_alloc_mem_ex()
 void *allocate_zone()
 {
     int i = 0;
-
-    while(i < 100)
-    {
+    
+    while(i < 100){
         ft_lstadd_back(&g_zones.tiny->blocks, new_block(TINY));
         i++;
     }
     i = 0;
-    while(i < 100)
+    while (i < 100)
     {
         ft_lstadd_back(&g_zones.small->blocks, new_block(SMALL));
         i++;
     }
+
     return NULL;
 }
