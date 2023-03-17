@@ -13,6 +13,11 @@ void	ft_lstadd_back(t_block **alst, t_block *new)
 			lst = lst->next;
 		lst->next = new;
 	}
+    if (*alst != NULL)
+    {
+        if (lst->next == NULL && lst->size == 1024)
+            lst->size = 0;
+    }
 }
 
 void	ft_lstadd_back_history(t_history **alst, t_history *new)
@@ -66,7 +71,7 @@ void	ft_lstdelone(t_block *block)
 
 t_block *new_block(size_t size)
 {
-    t_block *block = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    t_block *block = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
     if (block == MAP_FAILED) {
         perror("mmap");
         return NULL;
@@ -107,7 +112,7 @@ void show_alloc_mem()
     {
         t_zone zone3 = *g_zones.large;
         printf("LARGE : %p\n", zone3.blocks);
-        while (zone3.blocks != NULL)
+        while (zone3.blocks->next != NULL)
         {
             if (zone3.blocks->free == 1 && zone3.blocks->next != NULL)
                 printf("%p - %p = %zu bytes\n", zone3.blocks, zone3.blocks->next, zone3.blocks->size);
