@@ -73,6 +73,7 @@ t_block *new_block(size_t size)
 {
     t_block *block = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE , -1, 0);
     if (block == MAP_FAILED) {
+        write(1, "mmap failed in new_block\n", 25);
         return NULL;
     }
     block->next = NULL;

@@ -4,7 +4,7 @@ endif
 
 CC			= @gcc
 CFLAGS		= -Wall -Wextra -Werror -g -fPIC
-LIGHTFLAGS	= -Wall -Wextra -Werror -g #-fsanitize=address
+LIGHTFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address
 
 NAME		= libft_malloc_$(HOSTTYPE).so
 CHECK		= check_malloc
