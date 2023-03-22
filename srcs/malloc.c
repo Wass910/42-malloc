@@ -23,7 +23,7 @@ void *tiny_malloc(size_t size)
         }
         zone.blocks = zone.blocks->next;
     }
-   
+    write(1, "no More place for allocation\n", 29);
     return NULL;
 }
 
@@ -46,6 +46,7 @@ void *small_malloc(size_t size)
         }
         zone.blocks = zone.blocks->next;
     }
+    write(1, "no More place for allocation\n", 29);
     return NULL;
 }
 
@@ -88,6 +89,7 @@ void *large_malloc(size_t size)
         }
         zone.blocks = zone.blocks->next;
     }
+    write(1, "no More place for allocation\n", 29);
     return NULL;
 }
 
