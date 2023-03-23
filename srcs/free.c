@@ -14,7 +14,7 @@ void free(void *ptr)
             zone_small.blocks->free = 0;
             zone_small.blocks->size = 0;
             if (munmap(ptr, sizeof(ptr)) == -1) {
-                perror("munmap");
+                write(1, "munmap\n", 7);
                 return ;
             }
             return;
@@ -31,7 +31,7 @@ void free(void *ptr)
             zone_tiny.blocks->free = 0;
             zone_tiny.blocks->size = 0;
             if (munmap(ptr, sizeof(ptr)) == -1) {
-                perror("munmap");
+                write(1, "munmap\n", 7);
                 return ;
             }
             return;
@@ -46,7 +46,7 @@ void free(void *ptr)
             g_zones.size = g_zones.size - zone_large.blocks->size;
             zone_large.blocks->free = 0;
             if (munmap(ptr, sizeof(ptr)) == -1) {
-                perror("munmap");
+                write(1, "munmap\n", 7);
                 return ;
             }
             ft_lstdelone(zone_large.blocks);

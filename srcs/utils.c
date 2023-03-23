@@ -37,9 +37,9 @@ void	ft_lstadd_back_history(t_history **alst, t_history *new)
 
 t_history *new_history(char *str, void *ptr)
 {
-    t_history *history = mmap(NULL, sizeof(t_history), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    t_history *history = mmap(NULL, sizeof(t_history), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
     if (history == MAP_FAILED) {
-        perror("mmap");
+        write(1, "mmap\n", 5);
         return NULL;
     }
     history->next = NULL;
@@ -60,7 +60,7 @@ void	ft_lstdelone(t_block *block)
             else
                 zone_large.blocks->next = NULL;
             if (munmap(block, sizeof(block)) == -1) {
-                perror("munmap");
+                write(1, "munmap\n", 7);
                 return ;
             }
             return;
@@ -71,7 +71,7 @@ void	ft_lstdelone(t_block *block)
 
 t_block *new_block(size_t size)
 {
-    t_block *block = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE , -1, 0);
+    t_block *block = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON , -1, 0);
     if (block == MAP_FAILED) {
         write(1, "mmap failed in new_block\n", 25);
         return NULL;
@@ -143,12 +143,12 @@ void *allocate_zone()
 {
     int i = 0;
     
-    while(i < 100){
+    while(i < 16){
         ft_lstadd_back(&g_zones.tiny->blocks, new_block(TINY));
         i++;
     }
     i = 0;
-    while (i < 100)
+    while (i < 16)
     {
         ft_lstadd_back(&g_zones.small->blocks, new_block(SMALL));
         i++;

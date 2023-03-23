@@ -30,16 +30,12 @@ void *find_address(void *ptr)
 
 void *bigger_tiny(t_block *zone,size_t size)
 {
-    if (zone->free == 1)
-        g_zones.size = g_zones.size - zone->size;
     free(zone->addr);
     return (malloc(size));       
 }
 
 void *not_small(t_block *zone,size_t size)
 {
-    if (zone->free == 1)
-        g_zones.size = g_zones.size - zone->size;
     free(zone->addr);
     return (malloc(size));       
 }

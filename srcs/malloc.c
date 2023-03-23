@@ -11,9 +11,9 @@ void *tiny_malloc(size_t size)
     {
         if (zone.blocks->free == 0)
         {
-            zone.blocks->addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
+            zone.blocks->addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
             if (zone.blocks->addr == MAP_FAILED) {
-                perror("mmap tiny malloc failed");
+                write(1, "mmap tiny malloc failed\n", 24);
                 return NULL;
             }
             zone.blocks->free = 1;
@@ -34,9 +34,9 @@ void *small_malloc(size_t size)
     {
         if (zone.blocks->free == 0)
         {
-            zone.blocks->addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
+            zone.blocks->addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
             if (zone.blocks->addr == MAP_FAILED) {
-                perror("mmap small malloc failed");
+                write(1, "mmap small malloc failed\n", 25);
                 return  NULL;
             }
             zone.blocks->free = 1;
@@ -53,19 +53,19 @@ void *small_malloc(size_t size)
 void *large_malloc(size_t size)
 {
     if (g_zones.large == NULL){
-        g_zones.large = mmap(NULL, size  , PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
+        g_zones.large = mmap(NULL, size  , PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
         if (g_zones.large == MAP_FAILED){
-            perror("mmap large1 malloc failed");
+            write(1, "mmap large malloc failed\n", 25);
             g_zones.large = NULL;
             return NULL;
         }
     }
     else{
         t_zone zone = *g_zones.large;
-        g_zones.large = mmap(NULL, size + g_zones.large->size , PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
+        g_zones.large = mmap(NULL, size + g_zones.large->size , PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
         //write(1, "aaak\n", 5);
         if (g_zones.large == MAP_FAILED){
-            perror("mmap large malloc failed");
+            write(1, "mmap large1 malloc failed\n", 26);
             return NULL;
         }
         g_zones.large->blocks = zone.blocks;
@@ -77,9 +77,9 @@ void *large_malloc(size_t size)
         //write(1, "okok\n", 5);
         if (zone.blocks->free == 0)
         {
-            zone.blocks->addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
+            zone.blocks->addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
             if (zone.blocks->addr == MAP_FAILED) {
-                perror("mmap large malloc failed");
+                write(1, "mmap large2 malloc failed\n", 26);
                 return NULL;
             }
             zone.blocks->free = 1;
@@ -95,18 +95,17 @@ void *large_malloc(size_t size)
 
 void *malloc(size_t size)
 {
-    //write(1, "okok\n", 5);
     if (g_zones.tiny == NULL && g_zones.small == NULL)
     {
         size_t tiny_init_pages = (128 * TINY / getpagesize());
         size_t small_init_pages = (128 * SMALL / getpagesize());
-        g_zones.tiny = mmap(NULL, tiny_init_pages, PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
+        g_zones.tiny = mmap(NULL, tiny_init_pages, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
         if(g_zones.tiny == MAP_FAILED){
             write(1, "tiny zone malloc fail \n", 23);
             g_zones.tiny = NULL;
             return NULL;
         }
-        g_zones.small = mmap(NULL, small_init_pages, PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
+        g_zones.small = mmap(NULL, small_init_pages, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
         if (g_zones.small == MAP_FAILED){
             write(1, "small zone malloc failed \n", 26);
             g_zones.small = NULL;
